@@ -72,9 +72,6 @@
     }
   }
 
-  // Update logout handler to clear localStorage
-  btnLogout.addEventListener('click', () => { setAuth(null); showAuth(); });
-
   function headers() {
     const h = { 'Content-Type': 'application/json' };
     if (auth.token) h['Authorization'] = 'Bearer ' + auth.token;
@@ -97,13 +94,24 @@
   document.getElementById('login-submit').addEventListener('click', async () => {
     const email = document.getElementById('login-email').value;
     const password = document.getElementById('login-password').value;
+    document.getElementById('login-error').textContent = '';
     try {
       const data = await post('/auth/login', { email, password });
       setAuth(data.token);
       showDashboard();
       await loadDashboard();
     } catch (e) {
-      document.getElementById('login-error').textContent = e.message || JSON.stringify(e);
+      let errMsg = '';
+      if (e.message) {
+        errMsg = e.message;
+      } else if (e.error && e.fields) {
+        errMsg = e.error + ': ' + Object.values(e.fields).join(', ');
+      } else if (e.error) {
+        errMsg = e.error;
+      } else {
+        errMsg = JSON.stringify(e);
+      }
+      document.getElementById('login-error').textContent = errMsg;
     }
   });
 
@@ -112,6 +120,7 @@
     const name = document.getElementById('signup-name').value;
     const email = document.getElementById('signup-email').value;
     const password = document.getElementById('signup-password').value;
+    document.getElementById('signup-error').textContent = '';
     try {
       const data = await post('/auth/signup', { name, email, password });
       // auto-login
@@ -119,7 +128,17 @@
       showDashboard();
       await loadDashboard();
     } catch (e) {
-      document.getElementById('signup-error').textContent = e.message || JSON.stringify(e);
+      let errMsg = '';
+      if (e.message) {
+        errMsg = e.message;
+      } else if (e.error && e.fields) {
+        errMsg = e.error + ': ' + Object.values(e.fields).join(', ');
+      } else if (e.error) {
+        errMsg = e.error;
+      } else {
+        errMsg = JSON.stringify(e);
+      }
+      document.getElementById('signup-error').textContent = errMsg;
     }
   });
 
