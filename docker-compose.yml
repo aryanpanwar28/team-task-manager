@@ -5,12 +5,12 @@ services:
     image: mysql:8.0
     container_name: ttm-mysql
     environment:
-      MYSQL_ROOT_PASSWORD: jaat12345
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:-your_db_password_here}
       MYSQL_DATABASE: ttm
     ports:
       - "3306:3306"
     healthcheck:
-      test: ["CMD", "mysqladmin", "ping", "-uroot", "-pjaat12345"]
+      test: ["CMD", "mysqladmin", "ping", "-uroot", "-p${MYSQL_ROOT_PASSWORD:-your_db_password_here}"]
       interval: 5s
       timeout: 3s
       retries: 10
@@ -23,8 +23,8 @@ services:
     environment:
       SPRING_DATASOURCE_URL: "jdbc:mysql://db:3306/ttm?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC"
       SPRING_DATASOURCE_USERNAME: "root"
-      SPRING_DATASOURCE_PASSWORD: "jaat12345"
-      JWT_SECRET: "change-me-in-production-please-use-a-very-long-random-string-123456789"
+      SPRING_DATASOURCE_PASSWORD: ${MYSQL_ROOT_PASSWORD:-your_db_password_here}
+      JWT_SECRET: ${JWT_SECRET:-generate-with-openssl-rand-base64-48}
       PORT: "8080"
     depends_on:
       - db

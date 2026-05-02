@@ -2,6 +2,23 @@
 
 A complete web application for team task management with role-based access control, built with Spring Boot (backend) and HTML/CSS/JS (frontend).
 
+## ⚠️ **SECURITY WARNING**
+
+**Never commit real passwords or secrets to GitHub!** This repository should NOT contain:
+- Database passwords
+- JWT secrets
+- API keys
+- Private credentials
+
+All sensitive values MUST be stored in `.env.example` (with placeholder values) and loaded from environment variables. Use `.gitignore` to exclude:
+```
+.env
+.env.local
+*.key
+*.pem
+application-prod.properties
+```
+
 ## 📋 Features Implemented
 
 ✅ **Authentication** - Signup/Login with JWT tokens  
@@ -25,7 +42,6 @@ A complete web application for team task management with role-based access contr
 ### Option 1: Run Everything with Docker Compose (Recommended)
 
 ```bash
-cd /Users/aryanpanwar/Downloads/ttm/backend
 docker-compose up --build
 ```
 
@@ -46,8 +62,10 @@ docker-compose down
 mvn -DskipTests package
 
 # Start MySQL (if not running)
+# Set a strong password - use your own!
+DB_PASSWORD="your_strong_password_here"
 docker run --name ttm-mysql \
-  -e MYSQL_ROOT_PASSWORD=jaat12345 \
+  -e MYSQL_ROOT_PASSWORD=$DB_PASSWORD \
   -e MYSQL_DATABASE=ttm \
   -p 3306:3306 \
   -d mysql:8.0
@@ -65,7 +83,8 @@ Then open:
 
 ```bash
 export JWT_SECRET="$(openssl rand -base64 48)"
-SPRING_DATASOURCE_PASSWORD=jaat12345 mvn spring-boot:run
+export SPRING_DATASOURCE_PASSWORD="your_db_password"
+mvn spring-boot:run
 ```
 
 ---
@@ -76,14 +95,14 @@ SPRING_DATASOURCE_PASSWORD=jaat12345 mvn spring-boot:run
 ```bash
 curl -X POST http://localhost:8080/api/auth/signup \
   -H "Content-Type: application/json" \
-  -d '{"name":"Admin","email":"admin@example.com","password":"adminpass","role":"ADMIN"}'
+  -d '{"name":"Admin","email":"admin@example.com","password":"your_secure_password","role":"ADMIN"}'
 ```
 
 ### 2. Login (get JWT token)
 ```bash
 TOKEN=$(curl -s -X POST http://localhost:8080/api/auth/login \
   -H "Content-Type: application/json" \
-  -d '{"email":"admin@example.com","password":"adminpass"}' | jq -r '.token')
+  -d '{"email":"admin@example.com","password":"your_secure_password"}' | jq -r '.token')
 
 echo "Your token: $TOKEN"
 ```
@@ -131,7 +150,7 @@ Initial schema is created automatically via Hibernate DDL (`spring.jpa.hibernate
 
 **Automatic Admin Seeder**: If the database is empty on startup, a default admin user is created:
 - Email: `admin@ttm.local`
-- Password: `adminpass`
+- Password: `adminpass` (⚠️ Change this after first login for production)
 
 ---
 
@@ -197,7 +216,7 @@ After successful deployment:
 
 ### Login/Signup
 1. Open frontend (http://localhost:8080 or deployed URL)
-2. Create an account or use seeded admin (`admin@ttm.local` / `adminpass`)
+2. Create an account or use default seeded admin (`admin@ttm.local` / `adminpass`)
 3. Login and receive JWT token (stored in browser)
 
 ### Create Project
@@ -287,8 +306,12 @@ java -jar target/team-task-manager-1.0.0.jar
 ```bash
 # Check MySQL is running
 docker ps | grep mysql
-# Or start MySQL:
-docker run --name ttm-mysql -e MYSQL_ROOT_PASSWORD=jaat12345 -e MYSQL_DATABASE=ttm -p 3306:3306 -d mysql:8.0
+# Or start MySQL with your own password:
+docker run --name ttm-mysql \
+  -e MYSQL_ROOT_PASSWORD=your_password_here \
+  -e MYSQL_DATABASE=ttm \
+  -p 3306:3306 \
+  -d mysql:8.0
 ```
 
 ### Frontend not loading

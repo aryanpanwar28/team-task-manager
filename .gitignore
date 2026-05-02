@@ -1,2 +1,10 @@
 target/ *.class *.jar .DS_Store .classpath .project .factorypath
 *.log
+.env
+.env.local
+.env.*.local
+*.key
+*.pem
+application-prod.properties
+.idea/
+*.iml
