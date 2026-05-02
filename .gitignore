@@ -1,0 +1,2 @@
+target/ *.jar *.class node_modules/ .env
+.DS_Store
