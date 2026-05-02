@@ -2,23 +2,6 @@
 
 A complete web application for team task management with role-based access control, built with Spring Boot (backend) and HTML/CSS/JS (frontend).
 
-## ⚠️ **SECURITY WARNING**
-
-**Never commit real passwords or secrets to GitHub!** This repository should NOT contain:
-- Database passwords
-- JWT secrets
-- API keys
-- Private credentials
-
-All sensitive values MUST be stored in `.env.example` (with placeholder values) and loaded from environment variables. Use `.gitignore` to exclude:
-```
-.env
-.env.local
-*.key
-*.pem
-application-prod.properties
-```
-
 ## 📋 Features Implemented
 
 ✅ **Authentication** - Signup/Login with JWT tokens  
