@@ -1,0 +1,40 @@
+version: '3.8'
+
+services:
+  db:
+    image: mysql:8.0
+    container_name: ttm-mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: jaat12345
+      MYSQL_DATABASE: ttm
+    ports:
+      - "3306:3306"
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-uroot", "-pjaat12345"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+  app:
+    build: .
+    image: team-task-manager:1.0.0
+    ports:
+      - "8080:8080"
+    environment:
+      SPRING_DATASOURCE_URL: "jdbc:mysql://db:3306/ttm?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC"
+      SPRING_DATASOURCE_USERNAME: "root"
+      SPRING_DATASOURCE_PASSWORD: "jaat12345"
+      JWT_SECRET: "change-me-in-production-please-use-a-very-long-random-string-123456789"
+      PORT: "8080"
+    depends_on:
+      - db
+    restart: unless-stopped
+
+  frontend:
+    build: ./frontend
+    image: team-task-manager-frontend:1.0.0
+    ports:
+      - "3000:80"
+    depends_on:
+      - app
+    restart: unless-stopped
