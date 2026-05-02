@@ -1,0 +1,115 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" /> <meta name="viewport" content="width=device-width,initial-scale=1" /> <title>Team Task Manager</title> 
+  <link rel="stylesheet" href="/styles.css" /> <script> window.API_BASE = 
+  'https://team-task-manager-production-5600.up.railway.app/api';</head>
+</script>
+<body>
+  <div id="app" class="container">
+    <header>
+      <h1>Team Task Manager</h1>
+      <nav id="nav">
+        <button id="btn-login">Login</button>
+        <button id="btn-signup">Signup</button>
+        <button id="btn-logout" style="display:none">Logout</button>
+      </nav>
+    </header>
+
+    <main>
+      <section id="auth-section">
+        <div id="login-form" class="card">
+          <h2>Login</h2>
+          <label>Email<input id="login-email" type="email" /></label>
+          <label>Password<input id="login-password" type="password" /></label>
+          <button id="login-submit">Login</button>
+          <div id="login-error" class="error"></div>
+        </div>
+
+        <div id="signup-form" class="card" style="display:none">
+          <h2>Signup</h2>
+          <label>Name<input id="signup-name" /></label>
+          <label>Email<input id="signup-email" type="email" /></label>
+          <label>Password<input id="signup-password" type="password" /></label>
+          <button id="signup-submit">Create account</button>
+          <div id="signup-error" class="error"></div>
+        </div>
+      </section>
+
+      <section id="dashboard-section" style="display:none">
+        <h2>Dashboard</h2>
+        <div id="dashboard-stats" class="card">
+          <div>Total: <span id="stat-total">0</span></div>
+          <div>Todo: <span id="stat-todo">0</span></div>
+          <div>InProgress: <span id="stat-inprogress">0</span></div>
+          <div>Done: <span id="stat-done">0</span></div>
+          <div>Overdue: <span id="stat-overdue">0</span></div>
+          <div>Mine: <span id="stat-mine">0</span></div>
+        </div>
+
+        <div id="create-project" class="card">
+          <h3>Create Project</h3>
+          <label>Name<input id="create-project-name" /></label>
+          <label>Description<input id="create-project-description" /></label>
+          <button id="create-project-submit">Create Project</button>
+          <div id="create-project-error" class="error"></div>
+        </div>
+
+        <div id="projects" class="card">
+          <h3>Your Projects</h3>
+          <ul id="project-list"></ul>
+        </div>
+
+        <div id="project-members" class="card">
+          <h3>Manage Project Members</h3>
+          <label>Selected Project ID<input id="manage-project-id" readonly /></label>
+          <label>Member ID to add<input id="add-member-id" /></label>
+          <button id="add-member-submit">Add Member</button>
+          <div id="add-member-error" class="error"></div>
+        </div>
+
+        <div id="tasks" class="card">
+          <h3>Tasks for selected project</h3>
+          <label>Project<select id="project-select"></select></label>
+
+          <div id="create-task" style="margin-top:12px">
+            <h4>Create Task</h4>
+            <label>Title<input id="create-task-title" /></label>
+            <label>Description<input id="create-task-desc" /></label>
+            <label>Due date<input id="create-task-dueDate" type="date" /></label>
+            <label>Assignee ID (optional)<input id="create-task-assigneeId" /></label>
+            <label>Priority<select id="create-task-priority"><option value="MEDIUM">MEDIUM</option><option value="LOW">LOW</option><option value="HIGH">HIGH</option></select></label>
+            <button id="create-task-submit">Create Task</button>
+            <div id="create-task-error" class="error"></div>
+          </div>
+
+          <ul id="task-list"></ul>
+
+          <!-- Edit task form -->
+          <div id="edit-task-form" class="card" style="display:none; margin-top:12px">
+            <h4>Edit Task</h4>
+            <input type="hidden" id="edit-task-id" />
+            <label>Title<input id="edit-task-title" /></label>
+            <label>Description<input id="edit-task-desc" /></label>
+            <label>Due date<input id="edit-task-dueDate" type="date" /></label>
+            <label>Assignee ID<input id="edit-task-assigneeId" /></label>
+            <label>Status<select id="edit-task-status"><option>TODO</option><option>IN_PROGRESS</option><option>DONE</option></select></label>
+            <label>Priority<select id="edit-task-priority"><option>MEDIUM</option><option>LOW</option><option>HIGH</option></select></label>
+            <div style="margin-top:8px">
+              <button id="edit-task-save">Save</button>
+              <button id="edit-task-cancel" style="background:#6b7280; margin-left:8px">Cancel</button>
+              <div id="edit-task-error" class="error"></div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer>
+      <small>Simple frontend for the Team Task Manager backend</small>
+    </footer>
+  </div>
+
+  <script src="/app.js"></script>
+</body>
+</html>
